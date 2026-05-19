@@ -1,0 +1,14 @@
+{
+  "name": "NoorQuran",
+  "short_name": "NoorQuran",
+  "description": "NoorQuran is a modern, feature-rich Quran companion app for reading, listening, memorization, and spiritual reflection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#b8860b",
+  "theme_color": "#b8860b",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
