@@ -32,7 +32,7 @@ export default function DhulHijjahBanner() {
             </p>
           ) : (
             <p
-              className="text-[10px] md:text-xs leading-snug text-center"
+              className="text-[8px] md:text-[10px] leading-snug text-center"
               style={{ color: '#3b1f00' }}
             >
               <span className="font-semibold" style={{ color: '#7c2d12' }}>

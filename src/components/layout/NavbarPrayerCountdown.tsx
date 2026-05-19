@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Clock, Bell } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getNextPrayer } from '../../services/prayerApi';
 
@@ -28,44 +28,22 @@ export default function NavbarPrayerCountdown({ onOpenLocation }: { onOpenLocati
 
   if (!next) return null;
 
-  const isUrgent = next.remaining * 60 < 600;
-
   return (
-    <>
-      {/* Desktop: button in navbar */}
-      <button
-        onClick={onOpenLocation}
-        className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all"
-        style={{
-          background: 'var(--accent-bg)',
-          borderColor: 'var(--accent)',
-          color: 'var(--accent)',
-        }}
-      >
-        <Clock size={12} />
-        <span className="font-medium">
-          {language === 'ar' ? getNameAr(next.name) : next.name}
-        </span>
-        <span className="tabular-nums">{formatTime(Math.round(next.remaining * 60))}</span>
-      </button>
-
-      {/* Mobile: floating notification */}
-      <button
-        onClick={onOpenLocation}
-        className="sm:hidden fixed bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-full shadow-lg border text-xs font-medium transition-all"
-        style={{
-          background: isUrgent ? '#dc2626' : 'var(--accent)',
-          borderColor: isUrgent ? '#dc2626' : 'var(--accent)',
-          color: 'white',
-        }}
-      >
-        <Bell size={12} />
-        <span className="font-medium">
-          {language === 'ar' ? getNameAr(next.name) : next.name}
-        </span>
-        <span className="tabular-nums">{formatTime(Math.round(next.remaining * 60))}</span>
-      </button>
-    </>
+    <button
+      onClick={onOpenLocation}
+      className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all"
+      style={{
+        background: 'var(--accent-bg)',
+        borderColor: 'var(--accent)',
+        color: 'var(--accent)',
+      }}
+    >
+      <Clock size={12} />
+      <span className="font-medium">
+        {language === 'ar' ? getNameAr(next.name) : next.name}
+      </span>
+      <span className="tabular-nums">{formatTime(Math.round(next.remaining * 60))}</span>
+    </button>
   );
 }
 
