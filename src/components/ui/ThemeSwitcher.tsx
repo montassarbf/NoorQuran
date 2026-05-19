@@ -42,7 +42,7 @@ export default function ThemeSwitcher() {
               initial={{ opacity: 0, scale: 0.95, y: -5 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -5 }}
-              className="absolute right-0 top-full mt-2 w-64 z-50 rounded-2xl border shadow-lg overflow-hidden"
+              className="absolute right-0 top-full mt-2 w-64 z-50 rounded-2xl border shadow-lg overflow-hidden max-sm:fixed max-sm:left-1/2 max-sm:-translate-x-1/2 max-sm:top-1/4 max-sm:mt-0 max-sm:w-[calc(100vw-2rem)]"
               style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
               <div className="p-3">

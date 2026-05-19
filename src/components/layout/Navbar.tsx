@@ -60,7 +60,7 @@ export default function Navbar() {
               <img src="/logo.png" alt={t('appName')} className="w-7 h-7 rounded" />
               <span className="hidden sm:inline text-base">{t('appName')}</span>
             </button>
-            <span className={scrolled ? 'hidden md:inline' : ''}><HijriClock /></span>
+            <span className="hidden sm:inline"><HijriClock /></span>
           </div>
 
           {/* Center - Desktop Nav */}
