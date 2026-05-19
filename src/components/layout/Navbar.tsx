@@ -87,7 +87,7 @@ export default function Navbar() {
 
           {/* Right */}
           <div className="flex items-center gap-2">
-            {scrolled && <NavbarPrayerCountdown onOpenLocation={() => setLocationOpen(true)} />}
+            <NavbarPrayerCountdown onOpenLocation={() => setLocationOpen(true)} />
             <ThemeSwitcher />
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
