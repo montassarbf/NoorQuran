@@ -487,33 +487,12 @@ function generateSurahQuizQuestion(
     !hasNumeralWord(splitIntoWords(a.text))
   );
   const pool = available.length > 0 ? available : fallback;
-  let ayah: { surah: number; verse: number; text: string };
-  let allWordsInSurah: string[];
-  let poolWords: string[];
-
-  if (pool.length > 0) {
-    ayah = pool[Math.floor(Math.random() * pool.length)];
-    allWordsInSurah = source.filter(a => a.surah === surahId).flatMap(a => splitIntoWords(a.text));
-    poolWords = allWordsInSurah.length > 0 ? allWordsInSurah : source.flatMap(a => splitIntoWords(a.text));
-  } else {
-    const backupPool = AYAH_POOL.filter(a =>
-      Math.max(a.text.split(/\s+/).filter(Boolean).length, 2) >= 2 &&
-      !hasNumeralWord(splitIntoWords(a.text)) &&
-      !used.includes(`${a.surah}:${a.verse}`)
-    );
-    const backupFallback = AYAH_POOL.filter(a =>
-      Math.max(a.text.split(/\s+/).filter(Boolean).length, 2) >= 2 &&
-      !hasNumeralWord(splitIntoWords(a.text))
-    );
-    const backup = backupPool.length > 0 ? backupPool : backupFallback;
-    ayah = backup[Math.floor(Math.random() * backup.length)];
-    allWordsInSurah = AYAH_POOL.flatMap(a => splitIntoWords(a.text));
-    poolWords = allWordsInSurah;
-  }
-
+  const ayah = pool[Math.floor(Math.random() * pool.length)];
   const words = splitIntoWords(ayah.text);
   const missingIndex = Math.floor(Math.random() * words.length);
   const missingWord = words[missingIndex];
+  const allWordsInSurah = source.filter(a => a.surah === surahId).flatMap(a => splitIntoWords(a.text));
+  const poolWords = allWordsInSurah.length > 0 ? allWordsInSurah : source.flatMap(a => splitIntoWords(a.text));
   const distractors = generateDistractors(missingWord, poolWords, 3);
   const options = shuffle([missingWord, ...distractors]);
   const answerIndex = options.indexOf(missingWord);
@@ -556,7 +535,8 @@ export function generateQuestions(
         Math.max(a.text.split(/\s+/).filter(Boolean).length, 2) >= 2 &&
         !hasNumeralWord(splitIntoWords(a.text))
       );
-      const actualCount = Math.min(qCount, Math.max(avail.length, 1));
+      if (avail.length === 0) break;
+      const actualCount = Math.min(qCount, avail.length);
       if (i >= actualCount) break;
       q = generateSurahQuizQuestion(sId, exclude, versePool);
       sessionKeys.push(`${q.type}:${q.verseKey}:${q.missingIndex}`);
