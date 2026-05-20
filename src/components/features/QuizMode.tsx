@@ -51,7 +51,19 @@ export default function QuizMode() {
       }
     }
 
-    setQuestions(generateQuestions(10, quizType, selectedSurah || undefined, pool));
+    try {
+      const qs = generateQuestions(10, quizType, selectedSurah || undefined, pool);
+      if (qs.length === 0) {
+        setError(language === 'ar' ? 'لا توجد آيات متاحة لهذه السورة' : 'No verses available for this surah');
+        setLoading(false);
+        return;
+      }
+      setQuestions(qs);
+    } catch (err) {
+      setError(language === 'ar' ? 'حدث خطأ أثناء إنشاء الأسئلة' : 'Error generating questions');
+      setLoading(false);
+      return;
+    }
     setCurrentQuestion(0);
     setSelectedAnswer(null);
     setIsCorrect(null);
@@ -61,7 +73,7 @@ export default function QuizMode() {
     setGameOver(false);
     setStarted(true);
     setLoading(false);
-  }, [quizType, selectedSurah]);
+  }, [quizType, selectedSurah, language]);
 
   useEffect(() => {
     if (!started || gameOver || selectedAnswer !== null) return;
@@ -152,6 +164,12 @@ export default function QuizMode() {
           </div>
 
           {/* Surah Picker — shown only for surah quiz type */}
+          {error && (
+            <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium text-center" style={{ background: 'var(--error-bg)', color: 'var(--error)', border: '1px solid var(--error)' }}>
+              {error}
+            </div>
+          )}
+
           {quizType === 'surah' && (
             <div className="mb-8">
               <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-muted)' }}>

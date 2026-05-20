@@ -377,7 +377,7 @@ function generateMissingWordQuestion(excludeKeys?: string[]): QuizQuestion {
     !hasNumeralWord(splitIntoWords(a.text))
   );
   const pool = available.length > 0 ? available : fallback;
-  const ayah = pool[Math.floor(Math.random() * pool.length)];
+  const ayah = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : AYAH_POOL[0];
   const words = splitIntoWords(ayah.text);
   const missingIndex = Math.floor(Math.random() * words.length);
   const missingWord = words[missingIndex];
@@ -487,12 +487,33 @@ function generateSurahQuizQuestion(
     !hasNumeralWord(splitIntoWords(a.text))
   );
   const pool = available.length > 0 ? available : fallback;
-  const ayah = pool[Math.floor(Math.random() * pool.length)];
+  let ayah: { surah: number; verse: number; text: string };
+  let allWordsInSurah: string[];
+  let poolWords: string[];
+
+  if (pool.length > 0) {
+    ayah = pool[Math.floor(Math.random() * pool.length)];
+    allWordsInSurah = source.filter(a => a.surah === surahId).flatMap(a => splitIntoWords(a.text));
+    poolWords = allWordsInSurah.length > 0 ? allWordsInSurah : source.flatMap(a => splitIntoWords(a.text));
+  } else {
+    const backupPool = AYAH_POOL.filter(a =>
+      Math.max(a.text.split(/\s+/).filter(Boolean).length, 2) >= 2 &&
+      !hasNumeralWord(splitIntoWords(a.text)) &&
+      !used.includes(`${a.surah}:${a.verse}`)
+    );
+    const backupFallback = AYAH_POOL.filter(a =>
+      Math.max(a.text.split(/\s+/).filter(Boolean).length, 2) >= 2 &&
+      !hasNumeralWord(splitIntoWords(a.text))
+    );
+    const backup = backupPool.length > 0 ? backupPool : backupFallback;
+    ayah = backup[Math.floor(Math.random() * backup.length)];
+    allWordsInSurah = AYAH_POOL.flatMap(a => splitIntoWords(a.text));
+    poolWords = allWordsInSurah;
+  }
+
   const words = splitIntoWords(ayah.text);
   const missingIndex = Math.floor(Math.random() * words.length);
   const missingWord = words[missingIndex];
-  const allWordsInSurah = source.filter(a => a.surah === surahId).flatMap(a => splitIntoWords(a.text));
-  const poolWords = allWordsInSurah.length > 0 ? allWordsInSurah : source.flatMap(a => splitIntoWords(a.text));
   const distractors = generateDistractors(missingWord, poolWords, 3);
   const options = shuffle([missingWord, ...distractors]);
   const answerIndex = options.indexOf(missingWord);
