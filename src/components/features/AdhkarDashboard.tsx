@@ -152,21 +152,21 @@ export default function AdhkarDashboard() {
                   }
                 >
                   <div className="p-4">
-                    <p className="font-arabic text-xl leading-relaxed mb-2" style={{ textAlign: 'center', color: 'var(--text-primary)' }}>
+                    <p className="font-arabic text-xl leading-relaxed mb-2" style={{ textAlign: 'center', color: activeCategory === 'dhul_hijjah' ? '#3b1f00' : 'var(--text-primary)' }}>
                       {item.text}
                     </p>
-                    <p className="text-sm mb-1 text-center" style={{ color: 'var(--text-secondary)' }}>
+                    <p className="text-sm mb-1 text-center" style={{ color: activeCategory === 'dhul_hijjah' ? '#5c2e00' : 'var(--text-secondary)' }}>
                       {item.translation}
                     </p>
                     {item.transliteration && (
-                      <p className="text-xs italic mb-2 text-center" style={{ color: 'var(--text-muted)' }}>
+                      <p className="text-xs italic mb-2 text-center" style={{ color: activeCategory === 'dhul_hijjah' ? '#7c4400' : 'var(--text-muted)' }}>
                         {item.transliteration}
                       </p>
                     )}
 
                     {/* Source Reference */}
                     {item.sourceReference && (
-                      <p className="text-[10px] text-center mb-2" style={{ color: 'var(--text-muted)' }}>
+                      <p className="text-[10px] text-center mb-2" style={{ color: activeCategory === 'dhul_hijjah' ? '#7c4400' : 'var(--text-muted)' }}>
                         {item.reference && item.reference !== item.sourceReference
                           ? `${item.reference} — `
                           : ''}

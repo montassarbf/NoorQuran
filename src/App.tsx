@@ -13,8 +13,7 @@ import QuizMode from './components/features/QuizMode';
 import ProfilePage from './components/ProfilePage';
 import AudioPlayer from './components/reader/AudioPlayer';
 import ServiceWorkerRegistrar from './components/ui/ServiceWorkerRegistrar';
-import TalbiyahBanner from './components/ui/TalbiyahBanner';
-import DhulHijjahBanner from './components/ui/DhulHijjahBanner';
+
 
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Home',
@@ -74,10 +73,8 @@ function AnimatedRoutes() {
   return (
     <div className="min-h-screen transition-colors duration-300">
       <BackgroundPattern />
-      <TalbiyahBanner />
-      <DhulHijjahBanner />
       <Navbar />
-      <div className="pt-[112px]" style={{ paddingBottom: showAudioPlayer ? '5rem' : '0' }}>
+      <div className="pt-[56px]" style={{ paddingBottom: showAudioPlayer ? '5rem' : '0' }}>
         <Routes location={location}>
           <Route path="/" element={<HomePage />} />
           <Route path="/quran/:surahId?" element={<QuranReader />} />

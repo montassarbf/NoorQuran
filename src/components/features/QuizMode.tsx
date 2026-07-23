@@ -381,14 +381,20 @@ export default function QuizMode() {
                 style={{
                   background: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success-bg)' : 'var(--error-bg)')
-                    : 'var(--bg-card)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success-bg)'
+                      : 'var(--bg-card)',
                   borderColor: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--border)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--border)',
                   color: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--text-primary)',
-                  opacity: selectedAnswer !== null && idx !== selectedAnswer ? 0.5 : 1,
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--text-primary)',
+                  opacity: selectedAnswer !== null && idx !== selectedAnswer && !(selectedAnswer !== null && !isCorrect && idx === question.answerIndex) ? 0.5 : 1,
                 }}
               >
                 {option}
@@ -432,14 +438,20 @@ export default function QuizMode() {
                 style={{
                   background: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success-bg)' : 'var(--error-bg)')
-                    : 'var(--bg-card)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success-bg)'
+                      : 'var(--bg-card)',
                   borderColor: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--border)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--border)',
                   color: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--text-primary)',
-                  opacity: selectedAnswer !== null && idx !== selectedAnswer ? 0.5 : 1,
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--text-primary)',
+                  opacity: selectedAnswer !== null && idx !== selectedAnswer && !(selectedAnswer !== null && !isCorrect && idx === question.answerIndex) ? 0.5 : 1,
                 }}
               >
                 {option}
@@ -477,14 +489,20 @@ export default function QuizMode() {
                 style={{
                   background: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success-bg)' : 'var(--error-bg)')
-                    : 'var(--bg-card)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success-bg)'
+                      : 'var(--bg-card)',
                   borderColor: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--border)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--border)',
                   color: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--text-primary)',
-                  opacity: selectedAnswer !== null && idx !== selectedAnswer ? 0.5 : 1,
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--text-primary)',
+                  opacity: selectedAnswer !== null && idx !== selectedAnswer && !(selectedAnswer !== null && !isCorrect && idx === question.answerIndex) ? 0.5 : 1,
                 }}
               >
                 {option}
@@ -522,14 +540,20 @@ export default function QuizMode() {
                 style={{
                   background: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success-bg)' : 'var(--error-bg)')
-                    : 'var(--bg-card)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success-bg)'
+                      : 'var(--bg-card)',
                   borderColor: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--border)',
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--border)',
                   color: selectedAnswer === idx
                     ? (isCorrect ? 'var(--success)' : 'var(--error)')
-                    : 'var(--text-primary)',
-                  opacity: selectedAnswer !== null && idx !== selectedAnswer ? 0.5 : 1,
+                    : selectedAnswer !== null && !isCorrect && idx === question.answerIndex
+                      ? 'var(--success)'
+                      : 'var(--text-primary)',
+                  opacity: selectedAnswer !== null && idx !== selectedAnswer && !(selectedAnswer !== null && !isCorrect && idx === question.answerIndex) ? 0.5 : 1,
                 }}
               >
                 {option}
@@ -549,7 +573,7 @@ export default function QuizMode() {
             <p className="text-lg font-bold mb-3" style={{ color: isCorrect ? 'var(--success)' : 'var(--error)' }}>
               {isCorrect
                 ? <><Check size={16} className="inline" style={{ color: 'var(--success)' }} /> {language === 'ar' ? 'صحيح!' : 'Correct!'}</>
-                : <><X size={16} className="inline" style={{ color: 'var(--error)' }} /> {language === 'ar' ? `${question.type === 'missing-word' || question.type === 'surah' ? question.missingWord : ''}` : `${question.type === 'missing-word' || question.type === 'surah' ? question.missingWord : ''}`}</>}
+                : <><X size={16} className="inline" style={{ color: 'var(--error)' }} /> {language === 'ar' ? 'الإجابة الصحيحة:' : 'Correct answer:'} <span style={{ color: 'var(--success)' }}>{question.type === 'missing-word' || question.type === 'surah' ? question.missingWord : question.options[question.answerIndex]}</span></>}
             </p>
             <button
               onClick={nextQuestion}

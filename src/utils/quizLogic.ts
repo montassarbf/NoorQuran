@@ -712,7 +712,8 @@ function generateSahabyQuestion(): QuizQuestion {
   const q = pool[Math.floor(Math.random() * pool.length)];
 
   const allAnswers = pool.map(s => s.answer);
-  const distractors = shuffle(allAnswers.filter(a => a !== q.answer)).slice(0, 3);
+  const uniqueAnswers = [...new Set(allAnswers.filter(a => a !== q.answer))];
+  const distractors = shuffle(uniqueAnswers).slice(0, 3);
   const options = shuffle([q.answer, ...distractors]);
   const answerIndex = options.indexOf(q.answer);
 

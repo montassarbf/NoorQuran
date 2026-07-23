@@ -39,7 +39,7 @@ export default function Navbar() {
     <>
       <nav
         className="fixed top-0 left-0 right-0 z-30 backdrop-blur-md p-5"
-        style={{ background: 'var(--bg-navbar)', borderColor: 'var(--border)', top: 56 }}
+        style={{ background: 'var(--bg-navbar)', borderColor: 'var(--border)', top: 0 }}
       >
         
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
