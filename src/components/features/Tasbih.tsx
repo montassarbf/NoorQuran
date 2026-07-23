@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Target, Sparkles } from 'lucide-react';
+import { RotateCcw, Target, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import type { TasbihCounter } from '../../types';
 
@@ -14,6 +15,7 @@ const DEFAULT_DHIKR: TasbihCounter[] = [
 
 export default function Tasbih() {
   const { tasbihCounters, updateTasbihCounter, resetTasbihCounter, language } = useApp();
+  const navigate = useNavigate();
   const [counters, setCounters] = useState<TasbihCounter[]>(() => {
     if (tasbihCounters.length > 0) return tasbihCounters;
     return DEFAULT_DHIKR;
@@ -62,6 +64,14 @@ export default function Tasbih() {
     <div className="max-w-md mx-auto px-4 pt-14 pb-8">
       {/* Header */}
       <div className="text-center mb-8">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-all hover:opacity-70 cursor-pointer"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          {language === 'ar' ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          {language === 'ar' ? 'العودة' : 'Back'}
+        </button>
         <h1 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
           {language === 'ar' ? 'التسبيح' : 'Tasbih'}
         </h1>

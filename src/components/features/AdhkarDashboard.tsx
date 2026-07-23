@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sun, Moon, Heart, Bed, Sunrise, Star, Check, ChevronLeft,
@@ -31,6 +32,7 @@ function saveCompleted(data: Record<string, number>) {
 
 export default function AdhkarDashboard() {
   const { language } = useApp();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [completed, setCompleted] = useState<Record<string, number>>(loadCompleted);
 
@@ -61,6 +63,14 @@ export default function AdhkarDashboard() {
     <div className="max-w-2xl mx-auto px-4 pt-16 pb-8">
       {/* Header */}
       <div className="text-center mb-8">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-all hover:opacity-70 cursor-pointer"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          {language === 'ar' ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          {language === 'ar' ? 'العودة' : 'Back'}
+        </button>
         <h1 className="text-3xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
           {language === 'ar' ? 'الأذكار' : 'Adhkar'}
         </h1>

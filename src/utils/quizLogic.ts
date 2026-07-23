@@ -805,6 +805,7 @@ export function generateQuestions(
     const exclude = [...usedKeys, ...sessionKeys];
 
     if (type === 'surah' && sId > 0) {
+      if (versePool && versePool.length === 0) break;
       const source = versePool || AYAH_POOL;
       const avail = source.filter(a =>
         a.surah === sId &&

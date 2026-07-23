@@ -46,7 +46,7 @@ export default function QuizMode() {
             verseCache.current[selectedSurah] = fetched;
           }
         } catch {
-          // API failed, pool stays undefined → falls back to AYAH_POOL
+          pool = [];
         }
       }
     }
@@ -54,7 +54,7 @@ export default function QuizMode() {
     try {
       const qs = generateQuestions(10, quizType, selectedSurah || undefined, pool);
       if (qs.length === 0) {
-        setError(language === 'ar' ? 'لا توجد آيات متاحة لهذه السورة' : 'No verses available for this surah');
+        setError(language === 'ar' ? 'لا توجد آيات متاحة لهذه السورة. تحقق من اتصالك بالإنترنت' : 'No verses available for this surah. Check your internet connection');
         setLoading(false);
         return;
       }
