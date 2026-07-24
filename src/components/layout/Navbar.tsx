@@ -42,9 +42,9 @@ export default function Navbar() {
         style={{ background: 'var(--bg-navbar)', borderColor: 'var(--border)', top: 0 }}
       >
         
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 h-16 min-w-0">
           {/* Left */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="p-2 rounded-lg lg:hidden transition-colors cursor-pointer"
@@ -60,7 +60,7 @@ export default function Navbar() {
               <img src="/logo.png" alt={t('appName')} className="w-7 h-7 rounded" />
               <span className="hidden sm:inline text-base">{t('appName')}</span>
             </button>
-            <span className="hidden sm:inline"><HijriClock /></span>
+            <span className="hidden md:inline"><HijriClock /></span>
           </div>
 
           {/* Center - Desktop Nav */}
@@ -86,12 +86,12 @@ export default function Navbar() {
           </div>
 
           {/* Right */}
-          <div className="flex items-center gap-2">
-            <NavbarPrayerCountdown onOpenLocation={() => setLocationOpen(true)} />
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0 min-w-0">
+            <div className="hidden sm:flex"><NavbarPrayerCountdown onOpenLocation={() => setLocationOpen(true)} /></div>
             <ThemeSwitcher />
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer"
               style={{
                 background: 'var(--accent-bg)',
                 borderColor: 'var(--accent)',

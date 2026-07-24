@@ -71,7 +71,7 @@ function AnimatedRoutes() {
   }
 
   return (
-    <div className="min-h-screen transition-colors duration-300">
+    <div className="min-h-screen transition-colors duration-300 overflow-x-hidden">
       <BackgroundPattern />
       <Navbar />
       <div className="pt-[56px]" style={{ paddingBottom: showAudioPlayer ? '5rem' : '0' }}>

@@ -763,11 +763,11 @@ export default function QuranReader() {
             </div>
 
             {/* Action bar */}
-            <div className="flex items-center justify-between px-5 py-2 border-t" style={{ borderColor: 'var(--border-light)' }}>
-              <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center justify-between px-3 sm:px-5 py-2 border-t gap-1" style={{ borderColor: 'var(--border-light)' }}>
+              <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
                 <button
                   onClick={() => toggleBookmark(verse.verse_number)}
-                  className="p-1.5 rounded-lg transition-colors"
+                  className="p-1.5 rounded-lg transition-colors flex-shrink-0"
                   style={{ color: isBookmarked(currentSurah, verse.verse_number) ? 'var(--accent)' : 'var(--text-muted)' }}
                   title={isBookmarked(currentSurah, verse.verse_number) ? 'Bookmarked' : 'Bookmark'}
                 >
@@ -797,7 +797,7 @@ export default function QuranReader() {
                       }
                     }
                   }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition-all"
+                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-semibold border transition-all flex-shrink-0"
                   style={{
                     background: 'var(--accent-bg)',
                     borderColor: 'var(--accent)',
@@ -807,7 +807,7 @@ export default function QuranReader() {
                   <BookOpen size={12} />
                   {expandedTafsir.has(verse.verse_number) ? (tafsirLoading.has(verse.verse_number) ? '...' : t('hide')) : t('tafsir')}
                 </button>
-                <span className="text-[10px] px-2" style={{ color: 'var(--text-muted)' }}>
+                <span className="text-[9px] sm:text-[10px] px-1 sm:px-2 truncate flex-shrink-0" style={{ color: 'var(--text-muted)' }}>
                   {t('juz')} {verse.juz_number} · {t('page')} {verse.page_number}
                 </span>
               </div>

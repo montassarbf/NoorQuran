@@ -406,7 +406,7 @@ export default function HomePage() {
             <div ref={adhkarScrollRef} className="flex gap-6 overflow-hidden p-2">
               {ADHKAR.filter((a) => a.category === 'morning').map((a) => (
                 <button key={a.id} onClick={() => navigate('/adhkar')}
-                  className="flex-shrink-0 w-[42rem] min-h-[34rem] rounded-2xl text-center transition-all hover:-translate-y-0.5 flex flex-col items-center justify-center relative overflow-hidden"
+                  className="flex-shrink-0 w-[min(42rem,85vw)] min-h-[20rem] sm:min-h-[34rem] rounded-2xl text-center transition-all hover:-translate-y-0.5 flex flex-col items-center justify-center relative overflow-hidden"
                   style={{
                     background: 'var(--bg-card)',
                     border: '2px solid var(--border)',

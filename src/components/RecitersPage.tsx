@@ -32,8 +32,8 @@ export default function RecitersPage() {
       </div>
 
       {/* Search & Filter */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="relative flex-1">
+      <div className="mb-6 space-y-3">
+        <div className="relative">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
           <input
             value={search}
@@ -43,12 +43,12 @@ export default function RecitersPage() {
             style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
         </div>
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
           {REGIONS.map((r) => (
             <button
               key={r}
               onClick={() => setRegion(r)}
-              className="px-3 py-2 rounded-xl text-xs font-medium border transition-all whitespace-nowrap"
+              className="px-3 py-2 rounded-xl text-xs font-medium border transition-all whitespace-nowrap flex-shrink-0"
               style={{
                 background: region === r ? 'var(--accent-bg)' : 'transparent',
                 borderColor: region === r ? 'var(--accent)' : 'var(--border)',
