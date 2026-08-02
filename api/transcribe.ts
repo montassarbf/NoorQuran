@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  let audioData = body;
+  let audioData: Buffer = body;
   let mime = (req.headers['content-type'] || '').split(';')[0].trim() || 'audio/webm';
 
   const contentType = req.headers['content-type'] || '';
@@ -46,7 +46,7 @@ export default async function handler(req: any, res: any) {
   form.append('model', 'whisper-large-v3-turbo');
   form.append('response_format', 'json');
   form.append('language', language);
-  form.append('file', new File([audioData], `recitation.${ext}`, { type: mime }));
+  form.append('file', new File([new Uint8Array(audioData)], `recitation.${ext}`, { type: mime }));
 
   const groqRes = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
     method: 'POST',
