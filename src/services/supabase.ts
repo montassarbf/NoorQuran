@@ -53,7 +53,13 @@ export async function getProfile(userId?: string) {
 
 export async function syncBookmarks(userId: string, bookmarks: any[]) {
   const { error } = await supabase.from('bookmarks').upsert(
-    bookmarks.map(b => ({ ...b, user_id: userId })),
+    bookmarks.map(b => ({
+      user_id: userId,
+      surah_id: b.surahId,
+      verse_number: b.verseNumber,
+      note: b.note || '',
+      timestamp: b.timestamp || Date.now(),
+    })),
     { onConflict: 'user_id,surah_id,verse_number' }
   );
   if (error) throw error;
@@ -71,6 +77,49 @@ export async function syncSettings(userId: string, settings: any) {
     { onConflict: 'user_id' }
   );
   if (error) throw error;
+}
+
+export interface RecitationProgressRow {
+  id: number;
+  surah_id: number;
+  verse_start: number;
+  verse_end: number;
+  accuracy: number;
+  target_words: number;
+  missing_words: number;
+  extra_words: string | null;
+  transcript: string | null;
+  created_at: string;
+}
+
+export async function syncRecitation(
+  userId: string,
+  attempt: { surahId: number; verseStart: number; verseEnd: number; accuracy: number; targetWords: number; missingWords: number; extraWords: string[]; rawTranscript: string; timestamp: number }
+) {
+  const { error } = await supabase.from('recitation_progress').insert({
+    user_id: userId,
+    surah_id: attempt.surahId,
+    verse_start: attempt.verseStart,
+    verse_end: attempt.verseEnd,
+    accuracy: Math.round(attempt.accuracy * 100),
+    target_words: attempt.targetWords,
+    missing_words: attempt.missingWords,
+    extra_words: attempt.extraWords.join(' ') || null,
+    transcript: attempt.rawTranscript || null,
+    created_at: new Date(attempt.timestamp).toISOString(),
+  });
+  if (error) throw error;
+}
+
+export async function getRecitationProgress(userId: string, limit: number = 50): Promise<RecitationProgressRow[]> {
+  const { data, error } = await supabase
+    .from('recitation_progress')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data || []) as RecitationProgressRow[];
 }
 
 export { isConfigured as isSupabaseConfigured };

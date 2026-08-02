@@ -7,7 +7,7 @@ import { getNextPrayer } from '../../services/prayerApi';
 import VerseOfTheDay from '../features/VerseOfTheDay';
 import LocationModal from '../layout/LocationModal';
 import { SURAHS } from '../../data/surahs';
-import { getWorkingReciters, getReciterImageUrl } from '../../data/reciters-data';
+import { getRecitersForRiwayah, getReciterImageUrl, getRiwayahLabel } from '../../data/reciters-data';
 import { ADHKAR } from '../../data/adhkar-data';
 
 function formatCountdown(seconds: number): string {
@@ -21,11 +21,10 @@ const PRAYER_NAMES = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 const PRAYER_NAMES_AR = ['الفجر', 'الشروق', 'الظهر', 'العصر', 'المغرب', 'العشاء'];
 const PRAYER_ICONS = [Sunrise, Sun, CloudSun, Sunset, Moon, CloudMoon];
 
-const WORKING_RECITERS = getWorkingReciters();
-
 export default function HomePage() {
   const navigate = useNavigate();
   const { language, userLocation, prayerTimes, settings, updateSettings } = useApp();
+  const workingReciters = getRecitersForRiwayah(settings.riwayah ?? 'hafs').filter((r) => r.hasCdnAudio);
   const [locationOpen, setLocationOpen] = useState(false);
   const [next, setNext] = useState<{ name: string; time: string; remaining: number } | null>(null);
   const [adhkarAtEnd, setAdhkarAtEnd] = useState(false);
@@ -312,7 +311,9 @@ export default function HomePage() {
                 {language === 'ar' ? 'القراء' : 'Reciters'}
               </h2>
               <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
-                {language === 'ar' ? 'استمع إلى جميع القراء' : 'Scroll through all reciters'}
+                {language === 'ar'
+                  ? `استمع إلى قراء رواية ${settings.riwayah === 'hafs' ? 'حفص' : settings.riwayah === 'warsh' ? 'ورش' : settings.riwayah === 'qalon' ? 'قالون' : settings.riwayah === 'douri' ? 'الدوري' : 'شعبة'}`
+                  : `${getRiwayahLabel(settings.riwayah ?? 'hafs')} reciters`}
               </p>
             </div>
           </motion.div>
@@ -348,7 +349,7 @@ export default function HomePage() {
             onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
             onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
           >
-            {[...WORKING_RECITERS, ...WORKING_RECITERS, ...WORKING_RECITERS, ...WORKING_RECITERS].map((r, i) => (
+            {[...workingReciters, ...workingReciters, ...workingReciters, ...workingReciters].map((r, i) => (
               <button
                 key={`${r.id}-${i}`}
                 onClick={() => navigate('/reciters/' + r.id)}

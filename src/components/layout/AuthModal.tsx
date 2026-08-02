@@ -137,7 +137,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
               )}
               <button
                 type="submit" disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium on-accent transition-all"
                 style={{ background: 'var(--accent)' }}
               >
                 {mode === 'signin' ? <LogIn size={16} /> : <UserPlus size={16} />}

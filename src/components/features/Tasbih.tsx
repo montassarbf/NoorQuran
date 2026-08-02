@@ -207,7 +207,7 @@ export default function Tasbih() {
         </button>
         <button
           onClick={() => setShowSelector(!showSelector)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all on-accent"
           style={{ background: 'var(--accent)' }}
         >
           <Target size={14} />

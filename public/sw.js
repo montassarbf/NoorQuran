@@ -1,9 +1,9 @@
-const CACHE = 'misbah-v1';
-const URLS = ['/', '/index.html'];
+const CACHE = 'misbah-v2';
+const SHELL = ['/', '/index.html'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(URLS))
+    caches.open(CACHE).then((cache) => cache.addAll(SHELL))
   );
   self.skipWaiting();
 });
@@ -16,10 +16,33 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  const isSameOrigin = event.request.url.startsWith(self.location.origin);
+  const { request } = event;
+  const isSameOrigin = request.url.startsWith(self.location.origin);
   if (!isSameOrigin) return;
+  if (request.url.includes('/api/')) return;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() =>
+        caches.match(request).then((cached) => cached || caches.match('/index.html'))
+      )
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    caches.match(request).then((cached) => {
+      const network = fetch(request)
+        .then((response) => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => cached);
+      return cached || network;
+    })
   );
 });
 

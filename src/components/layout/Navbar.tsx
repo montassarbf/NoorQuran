@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Mic, Lamp, GraduationCap, Sparkles, User, Menu, X, LogIn } from 'lucide-react';
+import { BookOpen, Mic, Lamp, GraduationCap, Sparkles, BookMarked, User, Menu, X, LogIn, Headphones } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ThemeSwitcher from '../ui/ThemeSwitcher';
 import HijriClock from '../ui/HijriClock';
@@ -14,6 +14,8 @@ const NAV_ITEMS = [
   { id: 'reciters', icon: Mic, labelEn: 'Reciters', labelAr: 'القراء' },
   { id: 'adhkar', icon: Sparkles, labelEn: 'Adhkar', labelAr: 'الأذكار' },
   { id: 'tasbih', icon: Lamp, labelEn: 'Tasbih', labelAr: 'التسبيح' },
+  { id: 'tajwid', icon: BookMarked, labelEn: 'Tajweed', labelAr: 'التجويد' },
+  { id: 'memorize', icon: Headphones, labelEn: 'Memorize', labelAr: 'الحفظ' },
   { id: 'quiz', icon: GraduationCap, labelEn: 'Quiz', labelAr: 'الاختبار' },
 ];
 
@@ -141,7 +143,7 @@ export default function Navbar() {
             className="border-t lg:hidden overflow-hidden"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
-            <div className="grid grid-cols-4 gap-1 p-2">
+            <div className="grid grid-cols-3 gap-1 p-2">
               {NAV_ITEMS.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPage === item.id;

@@ -4,14 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Check, Loader, Repeat, Shuffle, ListMusic } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getSurahAudioUrl, fetchSurahWords } from '../../services/quranApi';
-import { getReciterById, getWorkingReciters, RECITERS, getReciterImageUrl } from '../../data/reciters-data';
+import { getReciterById, getRecitersForRiwayah, RECITERS, getReciterImageUrl } from '../../data/reciters-data';
 import { SURAHS } from '../../data/surahs';
 import type { Reciter, Word } from '../../types';
 
 export default function AudioPlayer() {
   const navigate = useNavigate();
   const { settings, updateSettings, audioSurah, audioVerse, showAudioPlayer, audioPlayMode, audioTotalVerses, setAudioSurah, setAudioVerse, setAudioHighlightedWord, setAudioWords, closeAudioPlayer, language } = useApp();
-  const { reciter } = settings;
+  const { reciter, riwayah } = settings;
+  const isHafs = (riwayah ?? 'hafs') === 'hafs';
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -69,7 +70,7 @@ export default function AudioPlayer() {
             setProgress((audio.currentTime / audio.duration) * 100);
             setCurrentTime(audio.currentTime);
           }
-          if (isPlayingRef.current) {
+          if (isPlayingRef.current && isHafs) {
             trackWordPosition(audio.currentTime * 1000);
           }
         };
@@ -143,7 +144,7 @@ export default function AudioPlayer() {
     const targetWord = words.find((w) => w.verse_number === audioVerse && w.audio_timestamp != null);
     if (targetWord?.audio_timestamp != null) {
       audioRef.current.currentTime = targetWord.audio_timestamp / 1000;
-      setAudioHighlightedWord({ verse: audioVerse, wordIndex: 0 });
+      if (isHafs) setAudioHighlightedWord({ verse: audioVerse, wordIndex: 0 });
       const verseWords = words.filter(
         (w) => w.verse_number === audioVerse && (w.char_type_name === 'word' || w.char_type_name === 'end')
       );
@@ -228,7 +229,7 @@ export default function AudioPlayer() {
       (w) => w.verse_number === verseNum && (w.char_type_name === 'word' || w.char_type_name === 'end')
     );
     setAudioWords(verseWords as Word[]);
-    setAudioHighlightedWord({ verse: verseNum, wordIndex: 0 });
+    if (isHafs) setAudioHighlightedWord({ verse: verseNum, wordIndex: 0 });
     if (!isPlaying) {
       audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     }
@@ -348,7 +349,7 @@ export default function AudioPlayer() {
               <button onClick={prevSurah} className="p-1.5 rounded-full transition-all hover:scale-105 cursor-pointer" style={{ color: 'var(--text-muted)' }}>
                 <SkipBack size={15} />
               </button>
-              <button onClick={togglePlay} disabled={loadingSurah} className="w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-50 active:scale-95 cursor-pointer" style={{ background: 'var(--accent)', color: 'white', boxShadow: `0 0 16px ${loadingSurah ? 'transparent' : 'var(--accent)'}40` }}>
+              <button onClick={togglePlay} disabled={loadingSurah} className="w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-50 active:scale-95 cursor-pointer" style={{ background: 'var(--accent)', color: 'var(--on-accent)', boxShadow: `0 0 16px ${loadingSurah ? 'transparent' : 'var(--accent)'}40` }}>
                 {loadingSurah ? <Loader size={17} className="animate-spin" /> : isPlaying ? <Pause size={17} fill="currentColor" /> : <Play size={17} fill="currentColor" className="ml-0.5" />}
               </button>
               <button onClick={nextSurah} className="p-1.5 rounded-full transition-all hover:scale-105 cursor-pointer" style={{ color: 'var(--text-muted)' }}>
@@ -422,7 +423,7 @@ export default function AudioPlayer() {
                 <button onClick={prevSurah} className="p-1.5 rounded-full transition-all hover:scale-105 cursor-pointer" style={{ color: 'var(--text-muted)' }}>
                   <SkipBack size={18} />
                 </button>
-                <button onClick={togglePlay} disabled={loadingSurah} className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-50 active:scale-95 hover:scale-105 cursor-pointer" style={{ background: 'var(--accent)', color: 'white', boxShadow: `0 0 24px ${loadingSurah ? 'transparent' : 'var(--accent)'}60` }}>
+                <button onClick={togglePlay} disabled={loadingSurah} className="w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-50 active:scale-95 hover:scale-105 cursor-pointer" style={{ background: 'var(--accent)', color: 'var(--on-accent)', boxShadow: `0 0 24px ${loadingSurah ? 'transparent' : 'var(--accent)'}60` }}>
                   {loadingSurah ? <Loader size={20} className="animate-spin" /> : isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
                 </button>
                 <button onClick={nextSurah} className="p-1.5 rounded-full transition-all hover:scale-105 cursor-pointer" style={{ color: 'var(--text-muted)' }}>
@@ -514,7 +515,7 @@ export default function AudioPlayer() {
 
               {/* List */}
               <div className="max-h-[50vh] overflow-y-auto">
-                {getWorkingReciters().map((r: Reciter) => (
+                {getRecitersForRiwayah(riwayah ?? 'hafs').filter((r) => r.hasCdnAudio).map((r: Reciter) => (
                   <button
                     key={r.id}
                     onClick={() => switchReciter(r.id)}

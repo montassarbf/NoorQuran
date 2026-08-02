@@ -56,6 +56,7 @@ body {
   --accent-dark: #8b6914;
   --accent-bg: rgba(184,134,11,0.1);
   --accent-text: #ffffff;
+  --on-accent: #ffffff;
   --success: #059669;
   --success-bg: rgba(5,150,105,0.1);
   --error: #dc2626;
@@ -183,6 +184,7 @@ body {
   --accent-light: #cbd5e1;
   --accent-dark: #64748b;
   --accent-bg: rgba(148,163,184,0.12);
+  --on-accent: #0f172a;
   --glass-bg: rgba(30,41,59,0.7);
   --glass-border: rgba(51,65,85,0.5);
 }
@@ -203,6 +205,7 @@ body {
   --accent-light: #86efac;
   --accent-dark: #22c55e;
   --accent-bg: rgba(74,222,128,0.15);
+  --on-accent: #052e16;
   --glass-bg: rgba(20,83,45,0.7);
   --glass-border: rgba(22,101,52,0.5);
 }
@@ -223,6 +226,7 @@ body {
   --accent-light: #a3a3a3;
   --accent-dark: #737373;
   --accent-bg: rgba(255,255,255,0.08);
+  --on-accent: #000000;
   --glass-bg: rgba(10,10,10,0.8);
   --glass-border: rgba(26,26,26,0.5);
 }
@@ -243,6 +247,7 @@ body {
   --accent-light: #e8d48b;
   --accent-dark: #8b6914;
   --accent-bg: rgba(201,168,76,0.12);
+  --on-accent: #1a1a1a;
   --glass-bg: rgba(26,26,26,0.75);
   --glass-border: rgba(42,42,42,0.5);
 }
@@ -284,4 +289,47 @@ body {
 @keyframes mandalaSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ===== Mushaf reader ===== */
+.mushaf-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: none;
+}
+.mushaf-svg svg path,
+.mushaf-svg svg rect,
+.mushaf-svg svg polygon,
+.mushaf-svg svg circle,
+.mushaf-svg svg text,
+.mushaf-svg svg g {
+  pointer-events: none;
+}
+.mushaf-svg svg path.ayahPolygon {
+  pointer-events: all;
+  cursor: pointer;
+  transition: fill-opacity 0.15s ease;
+}
+.mushaf-svg svg path.ayahPolygon:hover {
+  fill: var(--accent);
+  fill-opacity: 0.16;
+}
+.mushaf-svg svg path.ayahPolygon.mushaf-active {
+  fill: var(--accent);
+  fill-opacity: 0.3;
+}
+
+/* ===== Contrast-safe text on accent backgrounds ===== */
+.on-accent {
+  color: var(--on-accent);
+}
+
+/* Invert black-on-white mushaf ink for dark themes */
+[data-theme="mocha-night"] .mushaf-svg svg,
+[data-theme="midnight-blue"] .mushaf-svg svg,
+[data-theme="forest-green"] .mushaf-svg svg,
+[data-theme="oled-black"] .mushaf-svg svg,
+[data-theme="dark-luxury"] .mushaf-svg svg {
+  filter: invert(0.92) hue-rotate(180deg);
 }

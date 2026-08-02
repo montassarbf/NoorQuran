@@ -1,4 +1,12 @@
-import type { Reciter } from '../types';
+import type { Reciter, RiwayahId } from '../types';
+
+const RIWAYAH_LABELS: Record<RiwayahId, string> = {
+  hafs: 'Hafs A\'n Assem',
+  warsh: 'Warsh A\'n Nafi\'',
+  qalon: 'Qalon A\'n Nafi\'',
+  douri: 'Aldori A\'n Abi Amr',
+  shubah: 'Sho\'bah A\'n Asim',
+};
 
 export const RECITERS: Reciter[] = [
   { id: 'Alafasy_128kbps', name: 'Mishary Rashid Al-Afasy', arabicName: 'مشاري راشد العفاسي', country: 'Kuwait', region: 'Other', style: 'Mujawwad', hasCdnAudio: true, editionId: 'ar.abdulbasitmurattal', color: '#1e6b4c', avatar: 'AF', imageUrl: 'https://quran-library.com/Mishary-Rashid-Alafasy.webp', mp3quranServer: 'https://server8.mp3quran.net/afs/' },
@@ -50,6 +58,28 @@ export const RECITERS: Reciter[] = [
   { id: 'yassin_al_jazaery_64kbps', name: 'Yassin Al-Jazaery', arabicName: 'ياسين الجزائري', country: 'Algeria', region: 'Other', style: 'Murattal', hasCdnAudio: false, color: '#4f46e5', avatar: 'YJ', imageUrl: 'https://fr.assabile.com/media/person/280x219/al-qari-yassen.png' },
   { id: 'abdullah_kamil_64kbps', name: 'Abdullah Kamil', arabicName: 'عبد الله كامل', country: 'Egypt6', region: 'Egypt', style: 'Murattal', hasCdnAudio: false, color: '#b45309', avatar: 'AK', mp3quranServer: 'https://server8.mp3quran.net/kaml/' , imageUrl: "https://fr.assabile.com/media/person/280x219/abdallah-kamel.jpg" },
   { id: 'bandar_baleela_64kbps', name: 'Bandar Baleela', arabicName: 'بندر بليلة', country: 'Saudi Arabia', region: 'Saudi', style: 'Murattal', hasCdnAudio: false, color: '#7c3aed', avatar: 'BB', imageUrl: 'https://fr.assabile.com/media/person/200x256/bandar-balila.jpg', quranicaudioSlug: 'bandar_baleela', mp3quranServer: 'https://server8.mp3quran.net/bndr/' },
+  // ── Warsh (أيمن النافع) ──
+  { id: 'Al-Hussary_Warsh', name: 'Mahmoud Khalil Al-Hussary (Warsh)', arabicName: 'محمود خليل الحصري - ورش', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#7c2d12', avatar: 'HW', imageUrl: 'https://quran-library.com/Mahmoud-Khalil-Al-Hussary.webp', mp3quranServer: 'https://server13.mp3quran.net/husr/Rewayat-Warsh-A-n-Nafi/', riwayah: 'warsh' },
+  { id: 'AbdulBasit_Warsh', name: 'Abdul Basit Abdus Samad (Warsh)', arabicName: 'عبد الباسط عبد الصمد - ورش', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#b45309', avatar: 'BW', imageUrl: 'https://quran-library.com/Abdulbasit-Abdusamad-2.webp', mp3quranServer: 'https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/', riwayah: 'warsh' },
+  { id: 'Omar_AlQazabri', name: 'Omar Al-Qazabri', arabicName: 'عمر القزابري', country: 'Morocco', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#be123c', avatar: 'OQ', mp3quranServer: 'https://server9.mp3quran.net/omar_warsh/', riwayah: 'warsh' },
+  { id: 'Rachid_Belalya', name: 'Rachid Belalya', arabicName: 'رشيد بلعليا', country: 'Morocco', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#0e7490', avatar: 'RB', mp3quranServer: 'https://server6.mp3quran.net/bl3/Rewayat-Warsh-A-n-Nafi/', riwayah: 'warsh' },
+  { id: 'Ibrahim_Dosari_Warsh', name: 'Ibrahim Aldosari (Warsh)', arabicName: 'إبراهيم الدوسري - ورش', country: 'Saudi Arabia', region: 'Saudi', style: 'Murattal', hasCdnAudio: true, color: '#4338ca', avatar: 'DW', mp3quranServer: 'https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/', riwayah: 'warsh' },
+  // ── Qalun (قالون) ──
+  { id: 'Al-Hussary_Qalon', name: 'Mahmoud Khalil Al-Hussary (Qalun)', arabicName: 'محمود خليل الحصري - قالون', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#1e3a8a', avatar: 'HQ', imageUrl: 'https://quran-library.com/Mahmoud-Khalil-Al-Hussary.webp', mp3quranServer: 'https://server13.mp3quran.net/husr/Rewayat-Qalon-A-n-Nafi/', riwayah: 'qalon' },
+  { id: 'Tarabulsi_Qalon', name: 'Ahmad Khader Al-Tarabulsi', arabicName: 'أحمد خضر الطرابلسي', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#9a3412', avatar: 'AT', mp3quranServer: 'https://server10.mp3quran.net/trablsi/', riwayah: 'qalon' },
+  { id: 'Addokali_Qalon', name: 'Addokali Mohammad Alalim', arabicName: 'الدوكالي محمد العالم', country: 'Libya', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#047857', avatar: 'DA', mp3quranServer: 'https://server7.mp3quran.net/dokali/', riwayah: 'qalon' },
+  { id: 'Salah_Alhashim_Qalon', name: 'Salah Alhashim (Qalun)', arabicName: 'صالح الهاشم - قالون', country: 'Saudi Arabia', region: 'Saudi', style: 'Murattal', hasCdnAudio: true, color: '#6d28d9', avatar: 'SQ', imageUrl: 'https://fr.assabile.com/media/person/280x219/salah-al-hashem.png', mp3quranServer: 'https://server12.mp3quran.net/salah_hashim_m/Rewayat-Qalon-A-n-Nafi/', riwayah: 'qalon' },
+  { id: 'Abu_Snina_Qalon', name: 'Mohammed Abu Snina', arabicName: 'محمد أبو سنينة', country: 'Jordan', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#b91c1c', avatar: 'MS', mp3quranServer: 'https://server16.mp3quran.net/sneineh/Rewayat-Qalon-A-n-Nafi/', riwayah: 'qalon' },
+  // ── Duri (الدوري) ──
+  { id: 'Al-Hussary_Douri', name: 'Mahmoud Khalil Al-Hussary (Duri)', arabicName: 'محمود خليل الحصري - الدوري', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#15803d', avatar: 'HD', imageUrl: 'https://quran-library.com/Mahmoud-Khalil-Al-Hussary.webp', mp3quranServer: 'https://server13.mp3quran.net/husr/Rewayat-Aldori-A-n-Abi-Amr/', riwayah: 'douri' },
+  { id: 'Muftah_Douri', name: 'Muftah Alsaltany (Duri)', arabicName: 'مفتاح السلطني - الدوري', country: 'Libya', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#7f1d1d', avatar: 'MD', mp3quranServer: 'https://server14.mp3quran.net/muftah_sultany/Rewayat-Aldori-A-n-Abi-Amr/', riwayah: 'douri' },
+  { id: 'Noreen_Douri', name: 'Noreen Mohammad Siddiq', arabicName: 'نورين محمد صديق', country: 'Saudi Arabia', region: 'Saudi', style: 'Murattal', hasCdnAudio: true, color: '#0f766e', avatar: 'NS', mp3quranServer: 'https://server16.mp3quran.net/nourin_siddig/Rewayat-Aldori-A-n-Abi-Amr/', riwayah: 'douri' },
+  { id: 'Deeban_Douri', name: 'Ahmed Deeban (Duri)', arabicName: 'أحمد ديبان - الدوري', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#c2410c', avatar: 'DD', mp3quranServer: 'https://server16.mp3quran.net/deban/Rewayat-Aldori-A-n-Abi-Amr/', riwayah: 'douri' },
+  { id: 'Alfateh_Alzubair', name: 'Alfateh Alzubair', arabicName: 'الفاتح الزبير', country: 'Tunisia', region: 'Tunisia', style: 'Murattal', hasCdnAudio: true, color: '#065f46', avatar: 'AZ', mp3quranServer: 'https://server6.mp3quran.net/fateh/', riwayah: 'douri' },
+  // ── Shubah (شعبة) ──
+  { id: 'Muftah_Shubah', name: 'Muftah Alsaltany (Shubah)', arabicName: 'مفتاح السلطني - شعبة', country: 'Libya', region: 'Other', style: 'Murattal', hasCdnAudio: true, color: '#92400e', avatar: 'MS', mp3quranServer: 'https://server14.mp3quran.net/muftah_sultany/Rewayat_Sho-bah-A-n-Asim/', riwayah: 'shubah' },
+  { id: 'Deeban_Shubah', name: 'Ahmed Deeban (Shubah)', arabicName: 'أحمد ديبان - شعبة', country: 'Egypt', region: 'Egypt', style: 'Murattal', hasCdnAudio: true, color: '#a16207', avatar: 'DS', mp3quranServer: 'https://server16.mp3quran.net/deban/Rewayat-Sho-bah-A-n-Asim/', riwayah: 'shubah' },
+  { id: 'Huthaifi_Shubah', name: 'Ali Alhuthaifi (Shubah)', arabicName: 'علي الحذيفي - شعبة', country: 'Saudi Arabia', region: 'Saudi', style: 'Murattal', hasCdnAudio: true, color: '#3730a3', avatar: 'HS', imageUrl: 'https://fr.assabile.com/media/person/280x219/ali-alhodaifi.png', mp3quranServer: 'https://server9.mp3quran.net/hthfi/Rewayat-Sho-bah-A-n-Asim/', riwayah: 'shubah' },
 ];
 
 export function getReciterById(id: string): Reciter | undefined {
@@ -63,6 +93,20 @@ export function getWorkingReciters(): Reciter[] {
 export function getReciterImageUrl(reciter: Reciter, size: number = 48): string {
   if (reciter.imageUrl) return reciter.imageUrl;
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(reciter.name)}&background=${reciter.color.replace('#', '')}&color=fff&size=${size}&bold=true`;
+}
+
+export function getRecitersForRiwayah(riwayah: RiwayahId = 'hafs'): Reciter[] {
+  return RECITERS.filter((r) => (r.riwayah ?? 'hafs') === riwayah);
+}
+
+export function getDefaultReciterForRiwayah(riwayah: RiwayahId = 'hafs'): string {
+  const list = getRecitersForRiwayah(riwayah);
+  const preferred = list.find((r) => r.hasCdnAudio);
+  return preferred ? preferred.id : RECITERS[0].id;
+}
+
+export function getRiwayahLabel(riwayah: RiwayahId): string {
+  return RIWAYAH_LABELS[riwayah];
 }
 
 export const REGIONS = ['All', 'Egypt', 'Saudi', 'Tunisia', 'Other'] as const;

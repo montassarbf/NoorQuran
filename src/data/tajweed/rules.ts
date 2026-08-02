@@ -1,0 +1,178 @@
+export interface TajweedRuleInfo {
+  id: string;
+  labelEn: string;
+  labelAr: string;
+  color: string;
+  priority: number;
+  descriptionEn: string;
+  descriptionAr: string;
+}
+
+export const TAJWEED_RULE_LIST: TajweedRuleInfo[] = [
+  {
+    id: 'madd_6',
+    labelEn: 'Madd Lazim (6)',
+    labelAr: 'مد لازم (٦)',
+    color: '#c53030',
+    priority: 1,
+    descriptionEn: 'Elongation of exactly 6 harakat (alif, waw or ya with sukun followed by shaddah or sukun letter).',
+    descriptionAr: 'إطالة بمقدار ست حركات عندما يأتي حرف مد قبل حرف ساكن أو مشدد.',
+  },
+  {
+    id: 'madd_muttasil',
+    labelEn: 'Madd Muttasil',
+    labelAr: 'مد متصل',
+    color: '#e53e3e',
+    priority: 2,
+    descriptionEn: 'Elongation of 4-5 harakat when a madd letter is followed by hamzah in the same word.',
+    descriptionAr: 'إطالة بمقدار أربع أو خمس حركات عند اجتماع حرف المد مع الهمزة في كلمة واحدة.',
+  },
+  {
+    id: 'madd_munfasil',
+    labelEn: 'Madd Munfasil',
+    labelAr: 'مد منفصل',
+    color: '#f56565',
+    priority: 3,
+    descriptionEn: 'Elongation of 4-5 harakat when a madd letter ends a word and the next word begins with hamzah.',
+    descriptionAr: 'إطالة بمقدار أربع أو خمس حركات عند مجيء حرف المد آخر الكلمة والهمزة أول الكلمة التالية.',
+  },
+  {
+    id: 'madd_246',
+    labelEn: 'Madd (2/4/6)',
+    labelAr: 'مد (٢/٤/٦)',
+    color: '#e53e3e',
+    priority: 4,
+    descriptionEn: 'Flexible elongation of 2, 4 or 6 harakat (madd far`i with sukun).',
+    descriptionAr: 'إطالة بمقدار حركتين أو أربع أو ست حركات عند السكون العارض.',
+  },
+  {
+    id: 'madd_2',
+    labelEn: 'Madd Tabi`i (2)',
+    labelAr: 'مد طبيعي (٢)',
+    color: '#e53e3e',
+    priority: 5,
+    descriptionEn: 'Natural elongation of 2 harakat for alif, waw or ya madd letters.',
+    descriptionAr: 'الإطالة الطبيعية بمقدار حركتين لأحرف المد (ا، و، ي).',
+  },
+  {
+    id: 'qalqalah',
+    labelEn: 'Qalqalah',
+    labelAr: 'قلقلة',
+    color: '#b7791f',
+    priority: 6,
+    descriptionEn: 'Echo/rebound of the letters ق ط ب ج د when they carry sukun.',
+    descriptionAr: 'ارتداد الصوت عند النطق بأحد حروف القلقلة (قطب جد) ساكناً.',
+  },
+  {
+    id: 'ghunnah',
+    labelEn: 'Ghunnah',
+    labelAr: 'غنة',
+    color: '#38a169',
+    priority: 7,
+    descriptionEn: 'Nasal sound produced for noon and meem when they carry shaddah.',
+    descriptionAr: 'صوت أنفي يخرج من الأنف عند نطق النون أو الميم المشددة.',
+  },
+  {
+    id: 'ikhfa_shafawi',
+    labelEn: 'Ikhfa Shafawi',
+    labelAr: 'إخفاء شفوي',
+    color: '#805ad5',
+    priority: 8,
+    descriptionEn: 'Hiding the meem sakinah with ghunnah when followed by ba.',
+    descriptionAr: 'إخفاء الميم الساكنة مع غنة عند مجيء الباء بعدها.',
+  },
+  {
+    id: 'idghaam_shafawi',
+    labelEn: 'Idgham Shafawi',
+    labelAr: 'إدغام شفوي',
+    color: '#4c51bf',
+    priority: 9,
+    descriptionEn: 'Merging the meem sakinah into the following meem.',
+    descriptionAr: 'إدغام الميم الساكنة في الميم التالية لها.',
+  },
+  {
+    id: 'idghaam_ghunnah',
+    labelEn: 'Idgham with Ghunnah',
+    labelAr: 'إدغام بغنة',
+    color: '#3182ce',
+    priority: 10,
+    descriptionEn: 'Merging noon sakinah/tanween into ي ن م و with nasal sound.',
+    descriptionAr: 'إدغام النون الساكنة أو التنوين في حروف (ينمو) مع غنة.',
+  },
+  {
+    id: 'idghaam_no_ghunnah',
+    labelEn: 'Idgham without Ghunnah',
+    labelAr: 'إدغام بلا غنة',
+    color: '#2b6cb0',
+    priority: 11,
+    descriptionEn: 'Merging noon sakinah/tanween into ل ر without nasal sound.',
+    descriptionAr: 'إدغام النون الساكنة أو التنوين في حرفي (لر) بدون غنة.',
+  },
+  {
+    id: 'idghaam_mutajanisayn',
+    labelEn: 'Idgham Mutajanisayn',
+    labelAr: 'إدغام متجانسين',
+    color: '#6b46c1',
+    priority: 12,
+    descriptionEn: 'Merging two identical-makhraj letters such as ط followed by ت.',
+    descriptionAr: 'إدغام حرفين متجانسين في المخرج مثل الطاء مع التاء.',
+  },
+  {
+    id: 'idghaam_mutaqaribayn',
+    labelEn: 'Idgham Mutaqaribayn',
+    labelAr: 'إدغام متقاربين',
+    color: '#b83280',
+    priority: 13,
+    descriptionEn: 'Merging two letters with close makhraj such as ق followed by ك.',
+    descriptionAr: 'إدغام حرفين متقاربين في المخرج مثل القاف مع الكاف.',
+  },
+  {
+    id: 'iqlab',
+    labelEn: 'Iqlab',
+    labelAr: 'إقلاب',
+    color: '#dd6b20',
+    priority: 14,
+    descriptionEn: 'Changing noon sakinah/tanween into a meem with ghunnah before the letter ba.',
+    descriptionAr: 'قلب النون الساكنة أو التنوين ميماً مع غنة عند مجيء الباء.',
+  },
+  {
+    id: 'ikhfa',
+    labelEn: 'Ikhfa Haqiqi',
+    labelAr: 'إخفاء حقيقي',
+    color: '#805ad5',
+    priority: 15,
+    descriptionEn: 'Hiding the noon sakinah/tanween with ghunnah before the 15 ikhfa letters.',
+    descriptionAr: 'إخفاء النون الساكنة أو التنوين مع غنة قبل الحروف الخمسة عشر.',
+  },
+  {
+    id: 'lam_shamsiyyah',
+    labelEn: 'Lam Shamsiyyah',
+    labelAr: 'لام شمسية',
+    color: '#d69e2e',
+    priority: 16,
+    descriptionEn: 'The lam of al is silent and the following sun letter is shaddah.',
+    descriptionAr: 'لام تعريف شمسية تُلفظ مشددة ولا تُنطق اللام.',
+  },
+  {
+    id: 'silent',
+    labelEn: 'Silent Letter',
+    labelAr: 'حرف ساكن',
+    color: '#718096',
+    priority: 17,
+    descriptionEn: 'Letter carrying a sukun that is not part of another rule.',
+    descriptionAr: 'حرف عليه سكون لا يدخل تحت قاعدة أخرى.',
+  },
+  {
+    id: 'hamzat_wasl',
+    labelEn: 'Hamzat Wasl',
+    labelAr: 'همزة وصل',
+    color: '#975a16',
+    priority: 18,
+    descriptionEn: 'The connecting hamzah that is only pronounced at the start of speech.',
+    descriptionAr: 'همزة تظهر في بداية الكلام وتسقط عند الوصل.',
+  },
+];
+
+export const TAJWEED_RULE_INFO: Record<string, TajweedRuleInfo> = Object.fromEntries(
+  TAJWEED_RULE_LIST.map((r) => [r.id, r])
+);

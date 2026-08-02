@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import type { ThemeId, FontSize, DisplayMode, Language, Bookmark, MemorizationProgress, TasbihCounter, PrayerTimes, AppSettings, Word } from '../types';
 import { fetchPrayerTimes } from '../services/prayerApi';
 import { getSession, onAuthChange, signOut as supabaseSignOut, getProfile, updateProfile, syncBookmarks, getBookmarks } from '../services/supabase';
+import { getRecitersForRiwayah, getDefaultReciterForRiwayah } from '../data/reciters-data';
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'golden-glint',
@@ -17,6 +18,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   lastSurah: 1,
   lastVerse: 1,
   dailyGoal: 20,
+  readerMode: 'text',
+  riwayah: 'hafs',
+  lastMushafPage: 1,
 };
 
 interface AppContextType {
@@ -127,6 +131,7 @@ const translations: Record<string, Record<string, string>> = {
     tafsir: 'Tafsir',
     tafsirUnavailable: 'Tafsir not available',
     hide: 'Hide',
+    page: 'Page', go: 'Go',
   },
   ar: {
     appName: 'نور القرآن', home: 'الرئيسية', quran: 'القرآن', reciters: 'القراء',
@@ -150,6 +155,7 @@ const translations: Record<string, Record<string, string>> = {
     tafsir: 'التفسير',
     tafsirUnavailable: 'التفسير غير متاح',
     hide: 'إخفاء',
+    page: 'صفحة', go: 'انتقال',
   },
 };
 
@@ -230,7 +236,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const updateSettings = useCallback((partial: Partial<AppSettings>) => {
     setSettings(prev => {
-      const next = { ...prev, ...partial };
+      let reciter = partial.reciter ?? prev.reciter;
+      if (partial.riwayah && partial.riwayah !== prev.riwayah) {
+        const reciterForRiwayah = getRecitersForRiwayah(partial.riwayah);
+        if (!reciterForRiwayah.some((r) => r.id === reciter)) {
+          reciter = getDefaultReciterForRiwayah(partial.riwayah);
+        }
+      }
+      const next = { ...prev, ...partial, reciter };
       saveToStorage('settings', next);
       return next;
     });

@@ -46,6 +46,8 @@ export type ThemeId =
 export type FontSize = 'sm' | 'md' | 'lg' | 'xl';
 export type DisplayMode = 'normal' | 'continuous';
 export type Language = 'en' | 'ar';
+export type ReaderMode = 'text' | 'mushaf';
+export type RiwayahId = 'hafs' | 'warsh' | 'qalon' | 'douri' | 'shubah';
 export interface Reciter {
   id: string;
   name: string;
@@ -62,6 +64,7 @@ export interface Reciter {
   quranicaudioMp3Dir?: boolean;
   mp3quranServer?: string;
   mp3quranMujawwad?: string;
+  riwayah?: RiwayahId;
 }
 export interface AdhkarItem {
   id: string;
@@ -75,7 +78,7 @@ export interface AdhkarItem {
   sourceReference?: string;
   sourceArabic?: string;
 }
-export type QuizType = 'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby';
+export type QuizType = 'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby' | 'ai';
 export interface QuizQuestion {
   type: QuizType;
   surah: number;
@@ -88,6 +91,7 @@ export interface QuizQuestion {
   questionAr?: string;
   options: string[];
   answerIndex: number;
+  explanation?: string;
 }
 export interface Bookmark {
   surahId: number;
@@ -98,6 +102,18 @@ export interface Bookmark {
 export interface MemorizationProgress {
   surahId: number;
   hiddenWords: number[];
+}
+export interface RecitationAttempt {
+  id: string;
+  surahId: number;
+  verseStart: number;
+  verseEnd: number;
+  accuracy: number;
+  targetWords: number;
+  missingWords: number;
+  extraWords: string[];
+  rawTranscript: string;
+  timestamp: number;
 }
 export interface TasbihCounter {
   id: string;
@@ -129,4 +145,7 @@ export interface AppSettings {
   lastSurah: number;
   lastVerse: number;
   dailyGoal: number;
+  readerMode: ReaderMode;
+  riwayah: RiwayahId;
+  lastMushafPage: number;
 }

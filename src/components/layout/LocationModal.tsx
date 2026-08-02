@@ -94,7 +94,7 @@ export default function LocationModal({ open, onClose }: LocationModalProps) {
               </div>
               <button
                 onClick={handleSearch}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors"
+                className="px-4 py-2 rounded-xl text-sm font-medium on-accent transition-colors"
                 style={{ background: 'var(--accent)' }}
               >
                 {t('searchLocation')?.split(' ')[0] || 'Search'}

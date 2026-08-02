@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Type, Sun, Moon } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { getWorkingReciters } from '../../data/reciters-data';
-import type { FontSize, DisplayMode } from '../../types';
+import { getRecitersForRiwayah } from '../../data/reciters-data';
+import type { FontSize, DisplayMode, ReaderMode } from '../../types';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -11,13 +11,17 @@ interface SettingsPanelProps {
 
 export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { settings, updateSettings, t } = useApp();
-  const { fontSize, displayMode, showTransliteration, showWordTranslation, showVerseTranslation, reciter } = settings;
-  const workingReciters = getWorkingReciters();
+  const { fontSize, displayMode, showTransliteration, showWordTranslation, showVerseTranslation, reciter, readerMode, riwayah } = settings;
+  const workingReciters = getRecitersForRiwayah(riwayah ?? 'hafs').filter((r) => r.hasCdnAudio);
 
   const sizes: FontSize[] = ['sm', 'md', 'lg', 'xl'];
   const modes: { id: DisplayMode; labelEn: string; labelAr: string }[] = [
     { id: 'normal', labelEn: 'Verse by Verse', labelAr: 'آية آية' },
     { id: 'continuous', labelEn: 'Continuous', labelAr: 'مستمر' },
+  ];
+  const readerModes: { id: ReaderMode; labelEn: string; labelAr: string }[] = [
+    { id: 'text', labelEn: 'Text', labelAr: 'نصي' },
+    { id: 'mushaf', labelEn: 'Mushaf', labelAr: 'مصحف' },
   ];
 
   return (
@@ -42,6 +46,27 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             </div>
 
             <div className="flex-1 p-4 space-y-5">
+              {/* Reader Mode */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>Reader Mode</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {readerModes.map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => updateSettings({ readerMode: m.id })}
+                      className="py-2 px-1 rounded-xl border text-xs font-medium transition-all"
+                      style={{
+                        background: readerMode === m.id ? 'var(--accent-bg)' : 'transparent',
+                        borderColor: readerMode === m.id ? 'var(--accent)' : 'var(--border)',
+                        color: readerMode === m.id ? 'var(--accent)' : 'var(--text-secondary)',
+                      }}
+                    >
+                      {m.labelEn}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Font Size */}
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>{t('fontSize')}</p>

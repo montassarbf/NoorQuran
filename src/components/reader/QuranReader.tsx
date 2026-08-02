@@ -7,6 +7,9 @@ import { SURAHS } from '../../data/surahs';
 import { fetchVersesByChapter, getFallbackVerses, getWordAudioUrl, fetchTafsir } from '../../services/quranApi';
 import WordByWordDisplay from './WordByWordDisplay';
 import SettingsPanel from './SettingsPanel';
+import MushafNavBar from './MushafNavBar';
+import MushafPage from './MushafPage';
+import { MushafProvider } from '../../context/MushafContext';
 import type { Verse, Bookmark as BookmarkType } from '../../types';
 
 function toArabicNumeral(num: number): string {
@@ -17,7 +20,7 @@ export default function QuranReader() {
   const navigate = useNavigate();
   const { surahId } = useParams<{ surahId?: string }>();
   const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, incrementVersesRead, t, language, playVerseAudio, audioSurah, audioVerse, audioHighlightedWord, setAudioWords, closeAudioPlayer } = useApp();
-  const { lastSurah, lastVerse, displayMode } = settings;
+  const { lastSurah, lastVerse, displayMode, readerMode } = settings;
   const initialSurah = surahId ? Math.min(114, Math.max(1, parseInt(surahId, 10) || 1)) : lastSurah;
   const [currentSurah, setCurrentSurah] = useState(initialSurah);
   const [verses, setVerses] = useState<Verse[]>([]);
@@ -83,15 +86,17 @@ export default function QuranReader() {
     if (currentSurah !== prevSurah && audioSurah !== currentSurah) {
       closeAudioPlayer();
     }
-    loadVerses(currentSurah, 1);
+    if (readerMode === 'text') {
+      loadVerses(currentSurah, 1);
+    }
     updateSettings({ lastSurah: currentSurah });
     mainRef.current?.scrollTo({ top: 0 });
     window.scrollTo({ top: 0 });
-  }, [currentSurah, loadVerses, updateSettings, closeAudioPlayer, audioSurah]);
+  }, [currentSurah, loadVerses, updateSettings, closeAudioPlayer, audioSurah, readerMode]);
 
   useEffect(() => {
-    if (verses.length > 0 && !error) incrementVersesRead();
-  }, [verses.length, error, incrementVersesRead]);
+    if (verses.length > 0 && !error && readerMode === 'text') incrementVersesRead();
+  }, [verses.length, error, incrementVersesRead, readerMode]);
 
   useEffect(() => {
     setExpandedTafsir(new Set());
@@ -141,6 +146,15 @@ export default function QuranReader() {
 
   return (
     <>
+      {readerMode === 'mushaf' ? (
+        <main className="max-w-4xl mx-auto px-4 pt-20 pb-24">
+          <MushafProvider targetSurah={currentSurah}>
+            <MushafNavBar />
+            <MushafPage />
+          </MushafProvider>
+        </main>
+      ) : (
+        <>
       {/* Surah List Modal */}
       <AnimatePresence>
         {showSurahList && (
@@ -314,7 +328,7 @@ export default function QuranReader() {
               </button>
               <button onClick={() => handlePlayVerse(1, 'surah')}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold border transition-all hover:opacity-80"
-                style={{ borderColor: 'var(--accent)', background: 'var(--accent)', color: 'white' }}>
+                style={{ borderColor: 'var(--accent)', background: 'var(--accent)', color: 'var(--on-accent)' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
                 {language === 'ar' ? 'تشغيل السورة' : 'Play Surah'}
               </button>
@@ -385,7 +399,7 @@ export default function QuranReader() {
             <p className="font-medium mb-2">{error}</p>
             <button
               onClick={() => loadVerses(currentSurah, 1)}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-white"
+              className="px-4 py-2 rounded-xl text-sm font-medium on-accent"
               style={{ background: 'var(--accent)' }}
             >
               {t('tryAgain')}
@@ -588,7 +602,7 @@ export default function QuranReader() {
                   style={{
                     borderColor: 'var(--accent)',
                     background: 'var(--accent)',
-                    color: 'white',
+                    color: 'var(--on-accent)',
                   }}
                 >
                   <svg
@@ -873,7 +887,7 @@ export default function QuranReader() {
           <div className="flex justify-center mt-4 mb-8">
             <button
               onClick={loadMore}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all text-white"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all on-accent"
               style={{ background: 'var(--accent)' }}
             >
               <ChevronDown size={16} />
@@ -894,7 +908,7 @@ export default function QuranReader() {
               <div className="mt-4">
                 <button
                   onClick={() => setCurrentSurah(currentSurah + 1)}
-                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all on-accent"
                   style={{ background: 'var(--accent)' }}
                 >
                   {t('nextSurah')}: {SURAHS[currentSurah]?.name} →
@@ -904,6 +918,8 @@ export default function QuranReader() {
           </div>
         )}
       </main>
+        </>
+      )}
 
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>

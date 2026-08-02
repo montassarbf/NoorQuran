@@ -1,22 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Mic, Globe, Music, CheckCircle, XCircle } from 'lucide-react';
+import { Search, Mic, Globe, Music, CheckCircle, XCircle, BookOpen } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { RECITERS, REGIONS, getReciterImageUrl } from '../data/reciters-data';
+import { RECITERS, REGIONS, getReciterImageUrl, getRiwayahLabel } from '../data/reciters-data';
+import type { RiwayahId } from '../types';
+
+const RIWAYAT: RiwayahId[] = ['hafs', 'warsh', 'qalon', 'douri', 'shubah'];
 
 export default function RecitersPage() {
   const navigate = useNavigate();
   const { language } = useApp();
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState('All');
+  const [riwayah, setRiwayah] = useState<RiwayahId>('hafs');
 
   const filtered = RECITERS.filter((r) => {
     const matchSearch = r.name.toLowerCase().includes(search.toLowerCase()) ||
       r.arabicName.includes(search) ||
       r.country.toLowerCase().includes(search.toLowerCase());
     const matchRegion = region === 'All' || r.region === region;
-    return matchSearch && matchRegion;
+    const matchRiwayah = (r.riwayah ?? 'hafs') === riwayah;
+    return matchSearch && matchRegion && matchRiwayah;
   });
 
   return (
@@ -42,6 +47,26 @@ export default function RecitersPage() {
             className="w-full pl-9 pr-3 py-2.5 rounded-xl border text-sm outline-none"
             style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
+        </div>
+        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
+          {RIWAYAT.map((rw) => (
+            <button
+              key={rw}
+              onClick={() => setRiwayah(rw)}
+              className="px-3 py-2 rounded-xl text-xs font-medium border transition-all whitespace-nowrap flex-shrink-0"
+              style={{
+                background: riwayah === rw ? 'var(--accent-bg)' : 'transparent',
+                borderColor: riwayah === rw ? 'var(--accent)' : 'var(--border)',
+                color: riwayah === rw ? 'var(--accent)' : 'var(--text-secondary)',
+              }}
+            >
+              {rw === 'hafs'
+                ? (language === 'ar' ? 'حفص' : 'Hafs')
+                : (language === 'ar'
+                    ? (rw === 'warsh' ? 'ورش' : rw === 'qalon' ? 'قالون' : rw === 'douri' ? 'الدوري' : 'شعبة')
+                    : rw)}
+            </button>
+          ))}
         </div>
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
           {REGIONS.map((r) => (
@@ -95,8 +120,12 @@ export default function RecitersPage() {
 
             <div className="space-y-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
               <div className="flex items-center gap-1.5">
+                <BookOpen size={12} />
+                <span>{getRiwayahLabel(r.riwayah ?? 'hafs')}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
                 <Globe size={12} />
-                <span>{reciter.country}</span>
+                <span>{r.country}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Music size={12} />

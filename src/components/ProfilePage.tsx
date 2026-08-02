@@ -26,6 +26,11 @@ export default function ProfilePage() {
     ? Math.round(quizResults.reduce((a: number, r: any) => a + (r.score / r.total) * 100, 0) / quizResults.length)
     : 0;
 
+  const recitationAttempts = JSON.parse(localStorage.getItem(getStorageKey('recitationAttempts')) || '[]');
+  const bestRecitation = recitationAttempts.length > 0
+    ? Math.round(Math.max(...recitationAttempts.map((a: any) => a.accuracy)) * 100)
+    : 0;
+
   const getBookmarkedSurahName = (surahId: number) => {
     return SURAHS[surahId - 1]?.name || `Surah ${surahId}`;
   };
@@ -154,6 +159,7 @@ export default function ProfilePage() {
           { icon: BookOpen, label: language === 'ar' ? 'اليوم' : 'Today', value: `${versesReadToday}/${settings.dailyGoal}`, color: 'var(--accent)' },
           { icon: BookMarked, label: language === 'ar' ? 'العلامات' : 'Bookmarks', value: `${totalBookmarks}`, color: '#7c3aed' },
           { icon: Brain, label: language === 'ar' ? 'الاختبارات' : 'Quizzes', value: `${quizResults.length} (${avgScore}%)`, color: '#059669' },
+          { icon: Trophy, label: language === 'ar' ? 'التلاوات' : 'Recitations', value: `${recitationAttempts.length} (${bestRecitation}%)`, color: '#d97706' },
         ].map((stat, idx) => {
           const Icon = stat.icon;
           return (
@@ -216,6 +222,30 @@ export default function ProfilePage() {
                 </span>
                 <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                   {m.hiddenWords.length} {language === 'ar' ? 'كلمات' : 'words'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recitation Stats */}
+      {recitationAttempts.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-base font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
+            <Trophy size={18} className="inline-block align-middle me-1" /> {language === 'ar' ? 'آخر التلاوات المختبرة' : 'Recent Recitations'}
+          </h2>
+          <div className="space-y-2">
+            {recitationAttempts.slice(0, 8).map((a: any, idx: number) => (
+              <div key={idx}
+                className="flex items-center justify-between px-5 py-3 rounded-xl border text-sm"
+                style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}
+              >
+                <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                  {getBookmarkedSurahName(a.surahId)} {a.verseStart}:{a.verseEnd}
+                </span>
+                <span className="text-xs font-bold" style={{ color: a.accuracy >= 0.8 ? 'var(--success)' : 'var(--text-muted)' }}>
+                  {Math.round(a.accuracy * 100)}%
                 </span>
               </div>
             ))}

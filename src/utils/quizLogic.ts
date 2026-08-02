@@ -1,6 +1,6 @@
 import type { QuizQuestion } from '../types';
 import type { LucideIcon } from 'lucide-react';
-import { FileText, BookOpen, Lightbulb, ScrollText, Users } from 'lucide-react';
+import { FileText, BookOpen, Lightbulb, ScrollText, Users, Sparkles } from 'lucide-react';
 import { normalizeForMatch } from './fuzzyMatch';
 import { SURAHS } from '../data/surahs';
 import { SAHABA_QUESTIONS } from '../data/sahaba-data';
@@ -845,10 +845,11 @@ export function getQuizTimer(): number {
   return 20;
 }
 
-export const QUIZ_TYPES: { id: 'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby'; labelEn: string; labelAr: string; icon: LucideIcon; descEn: string; descAr: string }[] = [
+export const QUIZ_TYPES: { id: 'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby' | 'ai'; labelEn: string; labelAr: string; icon: LucideIcon; descEn: string; descAr: string }[] = [
   { id: 'missing-word', labelEn: 'Missing Word', labelAr: 'الكلمة الناقصة', icon: FileText, descEn: 'Complete the verse by finding the missing word', descAr: 'أكمل الآية باختيار الكلمة الناقصة' },
   { id: 'surah-id', labelEn: 'Identify the Surah', labelAr: 'حدد السورة', icon: BookOpen, descEn: 'Read the verse and guess which surah it belongs to', descAr: 'اقرأ الآية واختر السورة التي تنتمي إليها' },
   { id: 'classic', labelEn: 'Classic Questions', labelAr: 'أسئلة عامة', icon: Lightbulb, descEn: 'Test your Quran knowledge with general questions', descAr: 'اختبر معلوماتك القرآنية بأسئلة عامة' },
   { id: 'surah', labelEn: 'Surah Quiz', labelAr: 'اختبار سورة', icon: ScrollText, descEn: 'Choose a surah and get questions from its verses', descAr: 'اختر سورة وأجب عن أسئلة من آياتها' },
   { id: 'sahaby', labelEn: 'Guess the Sahaby', labelAr: 'خمن الصحابي', icon: Users, descEn: 'Identify the companion based on their description', descAr: 'تعرف على الصحابي من خلال وصفه' },
+  { id: 'ai', labelEn: 'AI Quiz', labelAr: 'أسئلة ذكية', icon: Sparkles, descEn: 'Smart questions generated live by AI (Groq)', descAr: 'أسئلة ذكية يولّدها الذكاء الاصطناعي لحظيًا' },
 ];

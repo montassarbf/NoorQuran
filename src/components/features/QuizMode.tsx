@@ -1,17 +1,18 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Zap, RotateCcw, Trophy, BookOpen, Lightbulb, Search, Loader, Check, X, Users, ArrowLeft } from 'lucide-react';
+import { Timer, Zap, RotateCcw, Trophy, BookOpen, Lightbulb, Search, Loader, Check, X, Users, ArrowLeft, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { generateQuestions, QUIZ_TYPES, getQuizTimer, resetUsedKeys } from '../../utils/quizLogic';
 import type { QuizQuestion } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { SURAHS } from '../../data/surahs';
-import { fetchSurahVersesForQuiz } from '../../services/quranApi';
+import { getSurahVersesForQuiz } from '../../data/tajweed';
+import { generateAiQuestions } from '../../services/quizApi';
 
 export default function QuizMode() {
   const { language } = useApp();
   const navigate = useNavigate();
-  const [quizType, setQuizType] = useState<'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby'>('missing-word');
+  const [quizType, setQuizType] = useState<'missing-word' | 'surah-id' | 'classic' | 'surah' | 'sahaby' | 'ai'>('missing-word');
   const [selectedSurah, setSelectedSurah] = useState<number | null>(null);
   const [surahSearch, setSurahSearch] = useState('');
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -26,44 +27,48 @@ export default function QuizMode() {
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const verseCache = useRef<Record<number, { surah: number; verse: number; text: string }[]>>({});
 
   const initGame = useCallback(async () => {
     const timer = getQuizTimer();
     setLoading(true);
     setError(null);
-    let pool: { surah: number; verse: number; text: string }[] | undefined;
-
-    if (quizType === 'surah' && selectedSurah) {
-      const useCache = verseCache.current[selectedSurah];
-      if (useCache) {
-        pool = useCache;
-      } else {
-        try {
-          const fetched = await fetchSurahVersesForQuiz(selectedSurah);
-          if (fetched.length > 0) {
-            pool = fetched;
-            verseCache.current[selectedSurah] = fetched;
-          }
-        } catch {
-          pool = [];
-        }
-      }
-    }
+    let qs: QuizQuestion[] = [];
 
     try {
-      const qs = generateQuestions(10, quizType, selectedSurah || undefined, pool);
+      if (quizType === 'ai') {
+        const pool = selectedSurah ? getSurahVersesForQuiz(selectedSurah) : undefined;
+        const surah = selectedSurah ? SURAHS[selectedSurah - 1] : undefined;
+        try {
+          const ai = await generateAiQuestions({
+            count: 10,
+            surahId: selectedSurah || undefined,
+            surahName: surah ? (language === 'ar' ? surah.arabic : surah.name) : undefined,
+            language: language as 'ar' | 'en',
+          });
+          qs = [...ai];
+          if (qs.length < 10) {
+            qs = [...qs, ...generateQuestions(10 - qs.length, 'classic')];
+          }
+        } catch {
+          qs = generateQuestions(10, selectedSurah ? 'surah' : 'classic', selectedSurah || undefined, pool);
+        }
+      } else if (quizType === 'surah' && selectedSurah) {
+        const pool = getSurahVersesForQuiz(selectedSurah);
+        qs = generateQuestions(10, 'surah', selectedSurah, pool);
+      } else {
+        qs = generateQuestions(10, quizType, undefined, undefined);
+      }
       if (qs.length === 0) {
-        setError(language === 'ar' ? 'لا توجد آيات متاحة لهذه السورة. تحقق من اتصالك بالإنترنت' : 'No verses available for this surah. Check your internet connection');
+        setError(language === 'ar' ? 'لا توجد آيات متاحة لهذه السورة' : 'No verses available for this surah');
         setLoading(false);
         return;
       }
-      setQuestions(qs);
-    } catch (err) {
+    } catch {
       setError(language === 'ar' ? 'حدث خطأ أثناء إنشاء الأسئلة' : 'Error generating questions');
       setLoading(false);
       return;
     }
+    setQuestions(qs);
     setCurrentQuestion(0);
     setSelectedAnswer(null);
     setIsCorrect(null);
@@ -163,17 +168,19 @@ export default function QuizMode() {
             ))}
           </div>
 
-          {/* Surah Picker — shown only for surah quiz type */}
+          {/* Surah Picker — shown for surah quiz and optionally for AI quiz */}
           {error && (
             <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium text-center" style={{ background: 'var(--error-bg)', color: 'var(--error)', border: '1px solid var(--error)' }}>
               {error}
             </div>
           )}
 
-          {quizType === 'surah' && (
+          {(quizType === 'surah' || quizType === 'ai') && (
             <div className="mb-8">
               <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-muted)' }}>
-                {language === 'ar' ? 'اختر سورة' : 'Select a Surah'}
+                {quizType === 'surah'
+                  ? (language === 'ar' ? 'اختر سورة' : 'Select a Surah')
+                  : (language === 'ar' ? 'اختر سورة (اختياري)' : 'Select a Surah (optional)')}
               </p>
               <div className="relative mb-2">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
@@ -207,9 +214,14 @@ export default function QuizMode() {
                   </button>
                 ))}
               </div>
-              {!selectedSurah && (
+              {quizType === 'surah' && !selectedSurah && (
                 <p className="text-[10px] mt-1.5" style={{ color: 'var(--text-muted)' }}>
                   {language === 'ar' ? 'يرجى اختيار سورة' : 'Please select a surah'}
+                </p>
+              )}
+              {quizType === 'ai' && (
+                <p className="text-[10px] mt-1.5" style={{ color: 'var(--text-muted)' }}>
+                  {language === 'ar' ? 'إذا لم تختر سورة، ستُولَّد أسئلة عامة عن القرآن كله' : 'If left unselected, questions will cover the whole Quran'}
                 </p>
               )}
             </div>
@@ -217,8 +229,11 @@ export default function QuizMode() {
 
           <button
             onClick={initGame}
-            className="w-full py-3 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2"
-            style={{ background: (quizType === 'surah' && !selectedSurah) || loading ? 'var(--text-muted)' : 'var(--accent)' }}
+            className="w-full py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+            style={{
+              background: (quizType === 'surah' && !selectedSurah) || loading ? 'var(--border)' : 'var(--accent)',
+              color: (quizType === 'surah' && !selectedSurah) || loading ? 'var(--text-muted)' : 'var(--on-accent)',
+            }}
             disabled={(quizType === 'surah' && !selectedSurah) || loading}
           >
             {loading ? (
@@ -267,7 +282,7 @@ export default function QuizMode() {
             </button>
             <button
               onClick={initGame}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl on-accent font-medium transition-all"
               style={{ background: 'var(--accent)' }}
             >
               <RotateCcw size={16} />
@@ -461,7 +476,7 @@ export default function QuizMode() {
         </>
       )}
 
-      {question.type === 'classic' && (
+      {(question.type === 'classic' || question.type === 'ai') && (
         <>
           <motion.div
             key={currentQuestion}
@@ -470,7 +485,9 @@ export default function QuizMode() {
             className="rounded-2xl border p-8 sm:p-10 mb-6"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
-            <Lightbulb size={32} className="mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+            {question.type === 'ai'
+              ? <Sparkles size={32} className="mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+              : <Lightbulb size={32} className="mx-auto mb-4" style={{ color: 'var(--accent)' }} />}
             <p className="text-lg sm:text-xl font-medium leading-relaxed text-center" style={{ color: 'var(--text-primary)' }}>
               {language === 'ar' ? (question as any).questionAr || question.question : question.question}
             </p>
@@ -575,9 +592,18 @@ export default function QuizMode() {
                 ? <><Check size={16} className="inline" style={{ color: 'var(--success)' }} /> {language === 'ar' ? 'صحيح!' : 'Correct!'}</>
                 : <><X size={16} className="inline" style={{ color: 'var(--error)' }} /> {language === 'ar' ? 'الإجابة الصحيحة:' : 'Correct answer:'} <span style={{ color: 'var(--success)' }}>{question.type === 'missing-word' || question.type === 'surah' ? question.missingWord : question.options[question.answerIndex]}</span></>}
             </p>
+            {question.explanation && (
+              <p
+                className="mx-auto max-w-xl text-sm leading-relaxed mb-4 px-4 py-3 rounded-xl text-start"
+                style={{ background: 'var(--accent-bg)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}
+                dir={language === 'ar' ? 'rtl' : 'ltr'}
+              >
+                {language === 'ar' ? '💡 ' : ''}{question.explanation}
+              </p>
+            )}
             <button
               onClick={nextQuestion}
-              className="px-6 py-2.5 rounded-xl text-white font-medium transition-all"
+              className="px-6 py-2.5 rounded-xl on-accent font-medium transition-all"
               style={{ background: 'var(--accent)' }}
             >
               {currentQuestion + 1 < questions.length
